@@ -72,10 +72,10 @@ fi
 
 eval "KEY=$KEY"
 
-CACHE_FILE="${OUT_DIR}/${KEY}.tgz"
+CACHE_FILE="${OUT_DIR}/${KEY}.tar"
 
 if [ "$NO_CLOBBER" = true ];then
-  BUCKET_FILE="$BUCKET/$KEY.tgz"
+  BUCKET_FILE="$BUCKET/$KEY.tar"
   FILE_LS=$(gsutil ls "$BUCKET_FILE")
   if [ "$FILE_LS" == "$BUCKET_FILE" ];then
     echo "Cache file exists, exiting save_cache without over-writing cache file."
@@ -84,7 +84,7 @@ if [ "$NO_CLOBBER" = true ];then
 fi
 
 echo "Compressing cache to ${CACHE_FILE}..."
-tar cpzf "$CACHE_FILE" ${PATHS[@]} -P
+tar cpf "$CACHE_FILE" ${PATHS[@]} -P
 
 if [ -n "$BUCKET" ];then
   echo "Uploading cache to Google Cloud Storage..."

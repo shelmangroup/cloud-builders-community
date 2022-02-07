@@ -59,7 +59,7 @@ eval "KEY=\"$KEY\""
 eval "KEY_FALLBACK_PATTERN=\"$KEY_FALLBACK_PATTERN\""
 
 if [ -n "${BUCKET}" ];then
-  REMOTE_CACHE_FILE="${BUCKET}/${KEY}.tgz"
+  REMOTE_CACHE_FILE="${BUCKET}/${KEY}.tar"
 
   echo "Checking cache file existence for: ${REMOTE_CACHE_FILE}"
   REMOTE_CACHE_FILE_EXISTENCE=$(gsutil -q stat ${REMOTE_CACHE_FILE}; echo $?)
@@ -69,10 +69,10 @@ if [ -n "${BUCKET}" ];then
     echo "Downloading cache file: ${REMOTE_CACHE_FILE}..."
     gsutil -q cp "${REMOTE_CACHE_FILE}" "${SRC_DIR}"
 
-    CACHE_FILE="${SRC_DIR}/${KEY}.tgz"
+    CACHE_FILE="${SRC_DIR}/${KEY}.tar"
 
     echo "Restoring cache from file ${CACHE_FILE}..."
-    tar xpzf "$CACHE_FILE" -P
+    tar xpf "$CACHE_FILE" -P
     rm "$CACHE_FILE"
   else
     # Check if fallback key pattern has been specified
@@ -97,12 +97,12 @@ if [ -n "${BUCKET}" ];then
     FALLBACK_CACHE_FILE_NAME=$(echo ${FALLBACK_CACHE_FILE} | awk '{n=split($0,parts,"/"); print parts[n]}')
 
     echo "Restoring cache from fallback file ${FALLBACK_CACHE_FILE}..."
-    tar xpzf "$FALLBACK_CACHE_FILE_NAME" -P
+    tar xpf "$FALLBACK_CACHE_FILE_NAME" -P
     rm "$FALLBACK_CACHE_FILE_NAME"
   fi
 # If SRC_DIR is specified, restore cache from local file
 elif [ -n "${SRC_DIR}" ]; then
-  LOCAL_CACHE_FILE="${SRC_DIR}/${KEY}.tgz"
+  LOCAL_CACHE_FILE="${SRC_DIR}/${KEY}.tar"
   echo "Restoring from local cache file ${LOCAL_CACHE_FILE}..."
-  tar xpzf "$LOCAL_CACHE_FILE" -P
+  tar xpf "$LOCAL_CACHE_FILE" -P
 fi

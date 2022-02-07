@@ -1,4 +1,7 @@
 steps:
+- id: setup
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['auth', 'configure-docker', 'gcr.io']
 
 - name: 'gcr.io/cloud-builders/docker'
   id: build_base_image
@@ -71,7 +74,7 @@ steps:
   - |
     echo "Verifying cache file exists."
 
-    cache_file="/cached/simple-key-$( checksum cloudbuild.yaml ).tgz"
+    cache_file="/cached/simple-key-$( checksum cloudbuild.yaml ).tar"
     if [[ ! -f "${cache_file}" ]];then
       echo "Missing cache file at ${cache_file}"
       echo "Contents:"
